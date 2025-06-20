@@ -1,0 +1,94 @@
+[
+  {
+    "title": "General Knowledge Quiz",
+    "description": "Test your general knowledge with this fun quiz!",
+    "category": "General Knowledge",
+    "difficulty": "easy",
+    "timeLimit": 300,
+    "isPublished": true,
+    "questions": [
+      {
+        "question": "What is the capital of France?",
+        "options": [
+          { "text": "London", "isCorrect": false },
+          { "text": "Berlin", "isCorrect": false },
+          { "text": "Paris", "isCorrect": true },
+          { "text": "Madrid", "isCorrect": false }
+        ],
+        "explanation": "Paris is the capital and most populous city of France.",
+        "points": 1,
+        "timeLimit": 30
+      },
+      {
+        "question": "Which planet is known as the Red Planet?",
+        "options": [
+          { "text": "Venus", "isCorrect": false },
+          { "text": "Mars", "isCorrect": true },
+          { "text": "Jupiter", "isCorrect": false },
+          { "text": "Saturn", "isCorrect": false }
+        ],
+        "explanation": "Mars is often referred to as the Red Planet because of its reddish appearance.",
+        "points": 1,
+        "timeLimit": 30
+      },
+      {
+        "question": "What is the largest mammal in the world?",
+        "options": [
+          { "text": "African Elephant", "isCorrect": false },
+          { "text": "Blue Whale", "isCorrect": true },
+          { "text": "Giraffe", "isCorrect": false },
+          { "text": "Polar Bear", "isCorrect": false }
+        ],
+        "explanation": "The Blue Whale is the largest animal known to have ever existed.",
+        "points": 2,
+        "timeLimit": 45
+      }
+    ]
+  },
+  {
+    "title": "Science Quiz",
+    "description": "Test your knowledge of basic science concepts.",
+    "category": "Science",
+    "difficulty": "medium",
+    "timeLimit": 600,
+    "isPublished": true,
+    "questions": [
+      {
+        "question": "What is the chemical symbol for water?",
+        "options": [
+          { "text": "CO2", "isCorrect": false },
+          { "text": "H2O", "isCorrect": true },
+          { "text": "NaCl", "isCorrect": false },
+          { "text": "O2", "isCorrect": false }
+        ],
+        "explanation": "Water is composed of two hydrogen atoms and one oxygen atom, hence H2O.",
+        "points": 1,
+        "timeLimit": 30
+      },
+      {
+        "question": "What force keeps us on the ground?",
+        "options": [
+          { "text": "Magnetic Force", "isCorrect": false },
+          { "text": "Gravity", "isCorrect": true },
+          { "text": "Friction", "isCorrect": false },
+          { "text": "Tension", "isCorrect": false }
+        ],
+        "explanation": "Gravity is the force that attracts two bodies toward each other, keeping us on the ground.",
+        "points": 1,
+        "timeLimit": 30
+      },
+      {
+        "question": "What is the speed of light?",
+        "options": [
+          { "text": "300,000 km/s", "isCorrect": true },
+          { "text": "150,000 km/s", "isCorrect": false },
+          { "text": "450,000 km/s", "isCorrect": false },
+          { "text": "600,000 km/s", "isCorrect": false }
+        ],
+        "explanation": "The speed of light in a vacuum is approximately 299,792 kilometers per second (or about 186,282 miles per second).",
+        "points": 2,
+        "timeLimit": 45
+      }
+    ]
+  }
+]

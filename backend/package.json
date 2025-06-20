@@ -1,0 +1,54 @@
+{
+  "name": "quizbuzz-backend",
+  "version": "1.0.0",
+  "description": "Backend for QuizBuzz - A Quiz Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node utils/seed.js -i",
+    "seed:destroy": "node utils/seed.js -d",
+    "seed:update": "node utils/updateSeedData.js"
+  },
+  "keywords": [
+    "quiz",
+    "education",
+    "learning",
+    "mern"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@google-cloud/storage": "^7.16.0",
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.2.0",
+    "hpp": "^0.2.3",
+    "html-to-text": "^9.0.5",
+    "js-yaml": "^4.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.1.1",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1",
+    "nodemailer": "^7.0.3",
+    "pug": "^3.0.3",
+    "redis": "^5.5.6",
+    "semver": "^7.7.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "user": "{{USER1_ID}}",
+    "quiz": "{{QUIZ1_ID}}",
+    "score": 100,
+    "totalQuestions": 3,
+    "correctAnswers": 3,
+    "timeSpent": 85,
+    "answers": [
+      {
+        "question": "{{QUESTION1_ID}}",
+        "selectedOption": 2,
+        "isCorrect": true,
+        "timeTaken": 25
+      },
+      {
+        "question": "{{QUESTION2_ID}}",
+        "selectedOption": 1,
+        "isCorrect": true,
+        "timeTaken": 30
+      },
+      {
+        "question": "{{QUESTION3_ID}}",
+        "selectedOption": 1,
+        "isCorrect": true,
+        "timeTaken": 30
+      }
+    ]
+  },
+  {
+    "user": "{{USER2_ID}}",
+    "quiz": "{{QUIZ1_ID}}",
+    "score": 67,
+    "totalQuestions": 3,
+    "correctAnswers": 2,
+    "timeSpent": 120,
+    "answers": [
+      {
+        "question": "{{QUESTION1_ID}}",
+        "selectedOption": 2,
+        "isCorrect": true,
+        "timeTaken": 40
+      },
+      {
+        "question": "{{QUESTION2_ID}}",
+        "selectedOption": 0,
+        "isCorrect": false,
+        "timeTaken": 50
+      },
+      {
+        "question": "{{QUESTION3_ID}}",
+        "selectedOption": 1,
+        "isCorrect": true,
+        "timeTaken": 30
+      }
+    ]
+  },
+  {
+    "user": "{{USER1_ID}}",
+    "quiz": "{{QUIZ2_ID}}",
+    "score": 75,
+    "totalQuestions": 3,
+    "correctAnswers": 3,
+    "timeSpent": 150,
+    "answers": [
+      {
+        "question": "{{QUESTION4_ID}}",
+        "selectedOption": 1,
+        "isCorrect": true,
+        "timeTaken": 40
+      },
+      {
+        "question": "{{QUESTION5_ID}}",
+        "selectedOption": 1,
+        "isCorrect": true,
+        "timeTaken": 50
+      },
+      {
+        "question": "{{QUESTION6_ID}}",
+        "selectedOption": 2,
+        "isCorrect": true,
+        "timeTaken": 60
+      }
+    ]
+  }
+]

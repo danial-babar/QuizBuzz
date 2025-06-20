@@ -1,0 +1,8 @@
+extends base
+
+block content
+  p Hi #{firstName},
+  p You've been invited to take a quiz: #{subject.replace(`${inviterName} has invited you to take a quiz: `, '')}
+  p #{inviterName} thinks you'll enjoy this challenge!
+  a(href=url, class='button') Take the Quiz
+  p Good luck and have fun!
