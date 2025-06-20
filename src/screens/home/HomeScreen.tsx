@@ -1,0 +1,440 @@
+import React, { useCallback, useState, useRef } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, RefreshControl, Animated } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '../../constants/theme';
+import { Category } from '../../constants/categories';
+
+// Define types for quiz items
+interface QuizItem {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  questionCount: number;
+  timeLimit: number;
+  image: any;
+}
+import { getPopularCategories } from '../../constants/categories';
+import { APP_ROUTES } from '../../constants/routes';
+import AppButton from '../../components/common/AppButton';
+import QuizCard from '../../components/quiz/QuizCard';
+import Header from '../../components/common/Header';
+
+// Mock data - replace with actual API calls
+const featuredQuizzes: QuizItem[] = [
+  {
+    id: '1',
+    title: 'General Knowledge Challenge',
+    description: 'Test your general knowledge with this fun quiz!',
+    category: 'general',
+    difficulty: 'medium',
+    questionCount: 10,
+    timeLimit: 15,
+    image: require('../../../assets/images/quiz1.jpg'),
+  },
+  {
+    id: '2',
+    title: 'Science & Technology',
+    description: 'How much do you know about science and technology?',
+    category: 'science',
+    difficulty: 'hard',
+    questionCount: 15,
+    timeLimit: 20,
+    image: require('../../../assets/images/quiz2.jpg'),
+  },
+  {
+    id: '3',
+    title: 'World History',
+    description: 'Test your knowledge of world history',
+    category: 'history',
+    difficulty: 'medium',
+    questionCount: 12,
+    timeLimit: 18,
+    image: require('../../../assets/images/quiz3.jpg'),
+  },
+];
+
+const recentQuizzes: QuizItem[] = [
+  {
+    id: '4',
+    title: 'Movie Trivia',
+    description: 'How well do you know your movies?',
+    category: 'movies',
+    difficulty: 'easy',
+    questionCount: 8,
+    timeLimit: 12,
+    image: require('../../../assets/images/quiz4.jpg'),
+  },
+  {
+    id: '5',
+    title: 'Music Legends',
+    description: 'Test your knowledge of music history',
+    category: 'music',
+    difficulty: 'medium',
+    questionCount: 10,
+    timeLimit: 15,
+    image: require('../../../assets/images/quiz5.jpg'),
+  },
+];
+
+const HomeScreen = () => {
+  const navigation = useNavigation();
+  const theme = useTheme();
+  // Mock user data for now - replace with actual auth context
+  const user = { name: 'User' };
+  const isAuthenticated = true;
+  const [refreshing, setRefreshing] = useState(false);
+  const scrollY = useRef(new Animated.Value(0)).current;
+
+  // Navigation handlers
+  const handleCategoryPress = (categoryId: string, categoryName: string) => {
+    // @ts-ignore
+    navigation.navigate(APP_ROUTES.QUIZ_LIST, { 
+      categoryId, 
+      title: categoryName 
+    });
+  };
+
+  const handleQuizPress = (quizId: string) => {
+    // @ts-ignore
+    navigation.navigate(APP_ROUTES.QUIZ_PLAY, { quizId });
+  };
+
+  const handleSeeAllCategories = () => {
+    // @ts-ignore
+    navigation.navigate(APP_ROUTES.CATEGORIES);
+  };
+
+  const handleSeeAllQuizzes = (type: 'featured' | 'recent') => {
+    // @ts-ignore
+    navigation.navigate(APP_ROUTES.QUIZ_LIST, { 
+      categoryId: type,
+      title: type === 'featured' ? 'Featured Quizzes' : 'Recent Quizzes'
+    });
+  };
+  
+  // Header animation
+  const headerTranslateY = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [0, -100],
+    extrapolate: 'clamp',
+  });
+  
+  const headerOpacity = scrollY.interpolate({
+    inputRange: [0, 80, 100],
+    outputRange: [1, 0.5, 0],
+    extrapolate: 'clamp',
+  });
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    // Simulate API call
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, []);
+
+  const navigateToCategory = (categoryId: string, categoryName: string) => {
+    // @ts-ignore
+    navigation.navigate(APP_ROUTES.CATEGORY_QUIZZES, { 
+      categoryId, 
+      title: categoryName 
+    });
+  };
+
+  const navigateToQuiz = (quizId: string) => {
+    // @ts-ignore
+    navigation.navigate(APP_ROUTES.QUIZ_PLAY, { quizId });
+  };
+
+  const renderCategoryItem = ({ item }: { item: Category }) => (
+    <TouchableOpacity 
+      style={[styles.categoryItem, { backgroundColor: item.backgroundColor }]}
+      onPress={() => handleCategoryPress(item.id, item.name)}
+    >
+      <Icon name={item.icon} size={24} color="white" />
+      <Text style={styles.categoryText}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+
+  const renderQuizItem = ({ item }: { item: QuizItem }) => (
+    <QuizCard
+      id={item.id}
+      title={item.title}
+      description={item.description}
+      category={item.category}
+      difficulty={item.difficulty}
+      questionCount={item.questionCount}
+      timeLimit={item.timeLimit}
+      image={item.image}
+      onPress={() => handleQuizPress(item.id)}
+      style={{ marginRight: 16, width: 280 }}
+    />
+  );
+
+  const renderHeader = () => (
+    <Animated.View 
+      style={[
+        styles.header,
+        { 
+          transform: [{ translateY: headerTranslateY }],
+          opacity: headerOpacity,
+          backgroundColor: theme.background,
+        },
+      ]}
+    >
+      <View style={styles.headerContent}>
+        <View>
+          <Text style={[styles.greeting, { color: theme.text }]}>
+            {isAuthenticated && user ? `Hello, ${user.name?.split(' ')[0] || 'there'}!` : 'Hello, Guest!'}
+          </Text>
+          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
+            Ready to test your knowledge?
+          </Text>
+        </View>
+        {!isAuthenticated && (
+          <AppButton
+            title="Sign In"
+            onPress={() => navigation.navigate('Login')}
+            variant="outline"
+            style={styles.signInButton}
+            textStyle={{ fontSize: 14 }}
+          />
+        )}
+      </View>
+      
+      <View style={styles.searchContainer}>
+        <TouchableOpacity
+          style={[styles.searchInput, { backgroundColor: theme.card, borderColor: theme.border }]}
+          onPress={() => navigation.navigate('Search')}
+        >
+          <Icon name="search" size={20} color={theme.textSecondary} style={styles.searchIcon} />
+          <Text style={[styles.searchText, { color: theme.textSecondary }]}>
+            Search for quizzes...
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </Animated.View>
+  );
+
+  return (
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Header title="QuizBuzz" showLogo={true} />
+      
+      <Animated.FlatList
+        data={[1]} // Single item to render the header
+        renderItem={() => null}
+        ListHeaderComponent={
+          <>
+            {renderHeader()}
+            
+            {/* Categories Section */}
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={[styles.sectionTitle, { color: theme.text }]}>
+                  Categories
+                </Text>
+                <TouchableOpacity onPress={handleSeeAllCategories}>
+                  <Text style={[styles.seeAll, { color: theme.primary }]}>
+                    See All
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              
+              <FlatList
+                data={getPopularCategories(6)}
+                renderItem={renderCategoryItem}
+                keyExtractor={(item) => item.id}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.categoriesList}
+              />
+            </View>
+            
+            {/* Featured Quizzes */}
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={[styles.sectionTitle, { color: theme.text }]}>
+                  Featured Quizzes
+                </Text>
+                <TouchableOpacity onPress={() => handleSeeAllQuizzes('featured')}>
+                  <Text style={[styles.seeAll, { color: theme.primary }]}>
+                    See All
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              
+              <FlatList
+                data={featuredQuizzes}
+                renderItem={renderQuizItem}
+                keyExtractor={(item) => item.id}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.quizzesList}
+              />
+            </View>
+            
+            {/* Recent Quizzes */}
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={[styles.sectionTitle, { color: theme.text }]}>
+                  Recently Added
+                </Text>
+                <TouchableOpacity onPress={() => handleSeeAllQuizzes('recent')}>
+                  <Text style={[styles.seeAll, { color: theme.primary }]}>
+                    See All
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              
+              <FlatList
+                data={recentQuizzes}
+                renderItem={renderQuizItem}
+                keyExtractor={(item) => item.id}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.quizzesList}
+              />
+            </View>
+          </>
+        }
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[theme.primary]}
+            tintColor={theme.primary}
+          />
+        }
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true }
+        )}
+        scrollEventThrottle={16}
+        contentContainerStyle={styles.contentContainer}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    paddingBottom: 24,
+  },
+  header: {
+    paddingTop: 16,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  greeting: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 14,
+  },
+  signInButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  searchContainer: {
+    marginTop: 8,
+  },
+  searchInput: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchText: {
+    fontSize: 14,
+  },
+  section: {
+    marginTop: 24,
+    paddingHorizontal: 20,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  seeAll: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  categoriesList: {
+    paddingRight: 20,
+  },
+  categoryItem: {
+    width: 100,
+    height: 100,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+    padding: 12,
+  },
+  categoryText: {
+    color: 'white',
+    fontSize: 12,
+    marginTop: 8,
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+  quizzesList: {
+    paddingRight: 20,
+  },
+  quizCard: {
+    width: 240,
+    marginRight: 16,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  quizImage: {
+    width: '100%',
+    height: 120,
+  },
+  quizContent: {
+    padding: 12,
+  },
+  quizTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  quizMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  quizMetaText: {
+    fontSize: 12,
+    marginLeft: 4,
+  },
+});
+
+export default HomeScreen;
